@@ -3,8 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 notes.md
-vg_venv/
+.env
 .idea/
+tests.ipynb
+backend/weights/*.pt
 
 # C extensions
 *.so
