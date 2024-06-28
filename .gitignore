@@ -7,6 +7,10 @@ notes.md
 .idea/
 tests.ipynb
 backend/weights/*.pt
+backend/weights/SadTalker
+results
+gfpgan
+examples
 
 # C extensions
 *.so

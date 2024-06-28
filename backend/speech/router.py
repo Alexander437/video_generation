@@ -6,7 +6,7 @@ from starlette.responses import StreamingResponse
 
 from backend.logger import logger
 from backend.speech.neural_speaker import neural_speaker
-from backend.speech.schemas import Speaker, SpeechRecv
+from backend.speech.schemas import SpeechRecv
 
 router = APIRouter(
     prefix="/speech",
