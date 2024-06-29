@@ -11,6 +11,7 @@ backend/weights/SadTalker
 results
 gfpgan
 examples
+tmp
 
 # C extensions
 *.so

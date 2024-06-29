@@ -3,7 +3,7 @@ from typing import Dict
 
 from pydantic import BaseModel, Field, model_validator
 
-from backend.logger import logger
+from backend.utils import logger
 
 
 class Speaker(str, Enum):
@@ -25,12 +25,6 @@ class SpeechRecv(BaseModel):
     )
     sample_rate: int = Field(
         default=8000,
-        title="Sample rate, возможные варианты: 48000, 24000, 8000"
+        title="Sample rate, возможные варианты: 48000, 24000, 8000",
+        enum=[48000, 24000, 8000],
     )
-
-    @model_validator(mode="before")
-    def validate_fqn(cls, values: Dict) -> Dict:
-        if values["sample_rate"] not in [48000, 24000, 8000]:
-            logger.warning(f"Sample rate {values['sample_rate']} not supported. Set 8000!")
-            values["sample_rate"] = 8000
-        return values

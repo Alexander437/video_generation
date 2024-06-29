@@ -1,5 +1,6 @@
 import logging
 import sys
+from functools import wraps
 
 from backend.settings import settings
 
