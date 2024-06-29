@@ -6,13 +6,12 @@ from typing import Annotated
 import cv2
 import numpy as np
 from fastapi import APIRouter, File, UploadFile
+from starlette.responses import FileResponse
 
-from backend.utils import logger
-from backend.speech.neural_speaker import neural_speaker
+from backend.speech.neural_speaker import NeuralSpeaker
 from backend.speech.schemas import Speaker
 from backend.video import get_video_gen
-from backend.video.SadTalker import get_args
-from backend.video.SadTalker.inference import main
+
 
 router = APIRouter(
     prefix="/video",
@@ -27,7 +26,7 @@ async def generate_video(
         speaker: Speaker = Speaker["aidar"],
         sample_rate: int = 8000,
 ):
-
+    neural_speaker = NeuralSpeaker()
     video_generator = get_video_gen("SadTalker")
     with tempfile.TemporaryDirectory(
             dir="/media/alex/Elements/My_projects/video_generation/tmp",
@@ -53,9 +52,4 @@ async def generate_video(
         # args.bfm_folder = "./weights/SadTalker/BFM_Fitting/"
         # main(args)
 
-    # video_path = f"results/{video_filename}"
-    # return FileResponse(video_path, media_type="video/mp4", filename=video_filename)
-
-    return {
-        "path_to_video": path_to_video,
-    }
+    return FileResponse(path_to_video, media_type="video/mp4", filename=path_to_video)

@@ -4,9 +4,8 @@ import wave
 from fastapi import APIRouter
 from starlette.responses import StreamingResponse
 
-from backend.utils import logger
-from backend.speech.neural_speaker import neural_speaker
 from backend.speech.schemas import SpeechRecv
+from backend.speech.neural_speaker import NeuralSpeaker
 
 router = APIRouter(
     prefix="/speech",
@@ -16,6 +15,7 @@ router = APIRouter(
 
 @router.post("/")
 async def speak(request: SpeechRecv):
+    neural_speaker = NeuralSpeaker()
     audio_data = neural_speaker.speak(
         text=request.text,
         speaker=request.speaker,

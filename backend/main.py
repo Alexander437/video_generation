@@ -3,7 +3,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from video.router import router as video_router
-from speech.router import router as speech_router
+# from speech.router import router as speech_router
 
 torch.set_num_threads(4)  # safe optimal value, i.e. 2 CPU cores
 
@@ -12,7 +12,7 @@ app = FastAPI(
 )
 
 app.include_router(video_router)
-app.include_router(speech_router)
+# app.include_router(speech_router)
 
 if __name__ == "__main__":
     # При reload=True модели будут инициализированы дважды

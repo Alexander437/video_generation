@@ -104,6 +104,3 @@ class NeuralSpeaker:
     def __num2words_ru(match):
         clean_number = match.group().replace(',', '.')
         return num2words(clean_number, lang='ru')
-
-
-neural_speaker = NeuralSpeaker()
