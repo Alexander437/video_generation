@@ -4,7 +4,7 @@ import wave
 from fastapi import APIRouter
 from starlette.responses import StreamingResponse
 
-from backend.logger import logger
+from backend.utils import logger
 from backend.speech.neural_speaker import neural_speaker
 from backend.speech.schemas import SpeechRecv
 
@@ -21,7 +21,6 @@ async def speak(request: SpeechRecv):
         speaker=request.speaker,
         sample_rate=request.sample_rate
     )
-    logger.debug(f"audio_data: {audio_data}")
     f = io.BytesIO()
     wav_file_in_memory = wave.open(f, 'w')
     wav_file_in_memory.setnchannels(1)  # mono

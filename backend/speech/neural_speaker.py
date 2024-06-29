@@ -9,7 +9,7 @@ import simpleaudio as sa
 from num2words import num2words
 from transliterate import translit
 
-from backend.logger import logger
+from backend.utils import logger
 from backend.settings import settings
 from backend.speech.schemas import Speaker
 
@@ -75,7 +75,8 @@ class NeuralSpeaker:
                     speaker=speaker,
                     sample_rate=sample_rate,
                     put_accent=put_accent,
-                    put_yo=put_yo
+                    put_yo=put_yo,
+                    audio_path=save_file,
                 )
                 logger.info(f'Model applied in {time.time() - start: 2f} seconds')
                 return None
