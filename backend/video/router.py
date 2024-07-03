@@ -3,10 +3,11 @@ import tempfile
 from time import strftime
 from typing import Annotated
 
+import aiofiles
 import cv2
 import numpy as np
 from fastapi import APIRouter, File, UploadFile
-from starlette.responses import FileResponse
+from starlette.responses import FileResponse, JSONResponse
 
 from backend.speech.neural_speaker import NeuralSpeaker
 from backend.speech.schemas import Speaker
@@ -29,7 +30,7 @@ async def generate_video(
     neural_speaker = NeuralSpeaker()
     video_generator = get_video_gen("SadTalker")
     with tempfile.TemporaryDirectory(
-            dir="/media/alex/Elements/My_projects/video_generation/tmp",
+            dir="./tmp",
     ) as tmpdirname:
 
         wav_path = os.path.join(tmpdirname, f"{strftime('%Y_%m_%d_%H.%M.%S')}.wav")
@@ -45,11 +46,18 @@ async def generate_video(
         image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
         path_to_video = video_generator(image, wav_path, tmpdirname)
-        # args = get_args()
-        # args.source_image = image
-        # args.driven_audio = wav_path
-        # args.checkpoint_dir = "./weights/SadTalker"
-        # args.bfm_folder = "./weights/SadTalker/BFM_Fitting/"
-        # main(args)
 
     return FileResponse(path_to_video, media_type="video/mp4", filename=path_to_video)
+
+
+@router.post("/upload")
+async def upload_image(file: UploadFile = File(...)):
+    upload_directory = "./tmp/uploads"
+    os.makedirs(upload_directory, exist_ok=True)
+
+    file_path = os.path.join(upload_directory, file.filename)
+    async with aiofiles.open(file_path, 'wb') as out_file:
+        content = await file.read()
+        await out_file.write(content)
+
+    return JSONResponse(content={"filename": file.filename}, status_code=200)
