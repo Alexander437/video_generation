@@ -72,6 +72,14 @@ Digital Production студии
 
 ### 5. Deploy
 
+#### Installation
+
+```bash
+sudo apt-get install -y python3-dev libasound2-dev
+sudo apt install build-essential ffmpeg
+pip install -r requirements.txt
+```
+
 ### 6. Демовидео
 
 ## Источники

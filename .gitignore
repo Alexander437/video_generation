@@ -9,6 +9,7 @@ tests.ipynb
 backend/weights/*.pt
 backend/weights/SadTalker
 results
+uploads
 gfpgan
 examples
 tmp

@@ -1,6 +1,7 @@
 import torch
 import uvicorn
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 from video.router import router as video_router
 # from speech.router import router as speech_router
@@ -13,6 +14,14 @@ app = FastAPI(
 
 app.include_router(video_router)
 # app.include_router(speech_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
     # При reload=True модели будут инициализированы дважды
