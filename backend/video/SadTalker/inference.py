@@ -42,8 +42,15 @@ class SadTalkerGenerator:
             self,
             pic: np.ndarray,
             wav_path: str,
-            save_dir: str
+            save_dir: str,
+            enhancer: Optional[str] = None,
+            still: Optional[bool] = None,
     ) -> Optional[str]:
+
+        """
+        enhancer=['gfpgan', 'RestoreFormer'], still=true|false (fullbody or face) + preprocess ('crop', 'extcrop', 'resize', 'full', 'extfull')
+        background_enhancer=[realesrgan or None]
+        """
 
         t1 = time()
         # crop image and extract 3dmm from image

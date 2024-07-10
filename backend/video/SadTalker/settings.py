@@ -54,7 +54,7 @@ class SadTalkerSettings(BaseSettings):
     enhancer: Optional[str] = Field(
         title="Face enhancer, [gfpgan, RestoreFormer]",
         default="gfpgan",
-        enum=['gfpgan', 'RestoreFormer'],
+        enum=['gfpgan', 'RestoreFormer', None],
     )
     background_enhancer: Optional[str] = Field(
         title="background enhancer, [realesrgan]",

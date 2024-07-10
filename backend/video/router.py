@@ -24,7 +24,7 @@ router = APIRouter(
 async def generate_video(
         img_file: Annotated[UploadFile, File()],
         text: str = "Привет! Как дела?",
-        speaker: Speaker = Speaker["aidar"],
+        speaker: Speaker = "aidar",
         sample_rate: int = 8000,
 ):
     neural_speaker = NeuralSpeaker()

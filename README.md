@@ -61,6 +61,7 @@ Digital Production студии
 ### 2. Части сервиса
    - генерация лица
    - генерация речи (используется [этот подход](https://colab.research.google.com/github/snakers4/silero-models/blob/master/examples_tts.ipynb))
+   - генерация исходного изображения [Kandinsky](https://github.com/ai-forever/Kandinsky-3)
 
 ### 3. Функциональность, преимущества/ограничения
 
