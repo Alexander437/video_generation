@@ -220,7 +220,7 @@ function App() {
               </Card>
               {/* Правая часть экрана */}
               <Card style={{width: '40%'}}>
-                  {/*<h3 className="text-blue-950 text-xl">Видео:</h3>*/}
+                  <h3 className="text-blue-950 text-xl">...</h3>
                   <div className="flex flex-col items-center justify-center max-h-1/5" style={{height: '41vh'}}>
                       {loading ? (
                           <Spin indicator={<LoadingOutlined style={{fontSize: 52}} spin/>}/>

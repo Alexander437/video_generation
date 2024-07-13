@@ -17,7 +17,7 @@
 проверить, как это выглядит и иметь авторские права по сравнению с правами на скачанные фото
 - этот функционал также предоставляется
 
-[Посмотрите, как сгенерированный аватар будет представлять проект)]()
+[Посмотрите, как сгенерированный аватар будет представлять проект)](https://youtu.be/GOgIH2UzEcw)
 
 [Таблица с проектами](https://docs.google.com/spreadsheets/d/1md-e4VOqdVASvk1Xtra2UEt0YHYCTLu_EQ_1jJcDvKk/edit?pli=1#gid=601294132)
 
@@ -121,7 +121,7 @@ sudo apt-get install -y python3-dev libasound2-dev build-essential ffmpeg
 pip install -r backend/requirements.txt
 ```
 
-Скопировать папки с весами [weights и gfpgan]() и поместить их в папку `backend`
+Скопировать папки с весами [weights и gfpgan](https://drive.google.com/drive/folders/1eibEb8W2Lhdh1WFNVJj3SGH06we5pHzv?usp=drive_link) и поместить их в папку `backend`
 
 #### В режиме разработки
 
@@ -170,6 +170,6 @@ npm run build
 
 ### 5. Демовидео
 
-Посмотрите, как сгенерированный аватар будет представлять проект)
-
-<video  src="url.mp4" type="video/mp4"> </video>
+* [test - генерация от начала до конца](https://drive.google.com/file/d/1jTX6HeOE1qI3jRII6VOi-810y963d9PW/view?usp=drive_link)
+* [Сгенерированный аватар сам представляет этот проект](https://drive.google.com/file/d/1azesoppCl-otT2rUWczfCSvg38vLke4c/view?usp=drive_link)
+* [result как выглядит сгенерированное видео, если его скачать](https://drive.google.com/file/d/1rtwhORd8pfIi9Qq4P3IIOIbnLHLvr619/view?usp=drive_link)

@@ -63,9 +63,9 @@ class NeuralSpeaker:
         </speak>
         ```
         """
-
-        text = translit(text, "ru")
-        text = re.sub(r'-?[0-9][0-9,._]*', self.__num2words_ru, text)
+        if text[:7] != '<speak>':
+            text = translit(text, "ru")
+            text = re.sub(r'-?[0-9][0-9,._]*', self.__num2words_ru, text)
         logger.debug(f'text after translit and num2words {text}')
         start = time.time()
         try:
