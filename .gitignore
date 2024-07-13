@@ -9,8 +9,7 @@ backend/weights/*.pt
 backend/weights/SadTalker
 backend/weights/Kandinsky
 backend/weights/SD3
-backend/weights/ddpm-celebahq-256
-backend/test.ipynb
+backend/weights/avatar
 train_model/dataset/CelebA/img_align_celeba
 train_model/dataset/CelebA/celeba_vectors
 train_model/dataset/CelebA/celeba_prompts

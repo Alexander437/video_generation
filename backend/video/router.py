@@ -1,7 +1,7 @@
 import os
 import tempfile
 from time import strftime
-from typing import Annotated
+from typing import Annotated, Optional
 
 import aiofiles
 import cv2
@@ -12,7 +12,6 @@ from starlette.responses import FileResponse, JSONResponse
 from backend.speech.neural_speaker import NeuralSpeaker
 from backend.speech.schemas import Speaker
 from backend.video import get_video_gen
-
 
 router = APIRouter(
     prefix="/video",
@@ -26,13 +25,15 @@ async def generate_video(
         text: str = "Привет! Как дела?",
         speaker: Speaker = "aidar",
         sample_rate: int = 8000,
+        enhancer: Optional[str] = None,
+        still: Optional[bool] = None,
+        preprocess: Optional[str] = None,
 ):
     neural_speaker = NeuralSpeaker()
     video_generator = get_video_gen("SadTalker")
     with tempfile.TemporaryDirectory(
             dir="./tmp",
     ) as tmpdirname:
-
         wav_path = os.path.join(tmpdirname, f"{strftime('%Y_%m_%d_%H.%M.%S')}.wav")
         neural_speaker.speak(
             text=text,
@@ -45,7 +46,14 @@ async def generate_video(
         nparr = np.frombuffer(img_bytes, np.uint8)
         image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-        path_to_video = video_generator(image, wav_path, tmpdirname)
+        path_to_video = video_generator(
+            pic=image,
+            wav_path=wav_path,
+            save_dir=tmpdirname,
+            enhancer=enhancer,
+            still=still,
+            preprocess=preprocess
+        )
 
     return FileResponse(path_to_video, media_type="video/mp4", filename=path_to_video)
 

@@ -1,10 +1,12 @@
 import os
 from time import strftime
+from typing import Optional, List
 
 from fastapi import APIRouter
+from matplotlib import pyplot as plt
 from starlette.responses import FileResponse
 
-from backend.avatar.SD_cpu.run import generate
+from backend.avatar.trained_model.run import run
 
 router = APIRouter(
     prefix="/avatar",
@@ -13,11 +15,11 @@ router = APIRouter(
 
 
 @router.post("/")
-def generate_avatar(text: str):
-    upload_directory = "./resources/avatar"
+def generate_avatar(text: Optional[List[str]] = None):
+    upload_directory = "./results/avatar"
     os.makedirs(upload_directory, exist_ok=True)
 
     path_to_file = f"{upload_directory}/{strftime('%Y_%m_%d_%H.%M.%S')}.jpg"
-    img = generate(prompt=text)
-    img.save(path_to_file)
-    return FileResponse(path_to_file, media_type="image/jpg", filename=path_to_file)
+    img = run(prompts=text)
+    plt.imsave(path_to_file, img)
+    return FileResponse(path_to_file, media_type="image/jpeg", filename=path_to_file)

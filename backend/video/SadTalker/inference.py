@@ -45,12 +45,23 @@ class SadTalkerGenerator:
             save_dir: str,
             enhancer: Optional[str] = None,
             still: Optional[bool] = None,
+            preprocess: Optional[str] = None
     ) -> Optional[str]:
 
-        """
-        enhancer=['gfpgan', 'RestoreFormer'], still=true|false (fullbody or face) + preprocess ('crop', 'extcrop', 'resize', 'full', 'extfull')
-        background_enhancer=[realesrgan or None]
-        """
+        if enhancer or still or preprocess:
+            settings = self.settings.model_copy()
+            if enhancer is not None:
+                if enhancer == 'none':
+                    settings.enhancer = None
+                else:
+                    settings.enhancer = enhancer
+            if still is not None:
+                settings.still = still
+            if preprocess is not None:
+                settings.preprocess = preprocess
+
+        else:
+            settings = self.settings
 
         t1 = time()
         # crop image and extract 3dmm from image
@@ -58,8 +69,8 @@ class SadTalkerGenerator:
         os.makedirs(first_frame_dir, exist_ok=True)
         print('3DMM Extraction for source image')
         first_coeff_path, crop_pic_path, crop_info = self.preprocess_model.generate(
-            pic, first_frame_dir, self.settings.preprocess,
-            pic_size=self.settings.size,
+            pic, first_frame_dir, settings.preprocess,
+            pic_size=settings.size,
             source_image_flag=True
         )
 
@@ -67,32 +78,32 @@ class SadTalkerGenerator:
             print("Can't get the coeffs of the input")
             return
 
-        if self.settings.ref_eyeblink is not None:
-            ref_eyeblink_videoname = os.path.splitext(os.path.split(self.settings.ref_eyeblink)[-1])[0]
+        if settings.ref_eyeblink is not None:
+            ref_eyeblink_videoname = os.path.splitext(os.path.split(settings.ref_eyeblink)[-1])[0]
             ref_eyeblink_frame_dir = os.path.join(save_dir, ref_eyeblink_videoname)
             os.makedirs(ref_eyeblink_frame_dir, exist_ok=True)
             print('3DMM Extraction for the reference video providing eye blinking')
             ref_eyeblink_coeff_path, _, _ = self.preprocess_model.generate(
-                self.settings.ref_eyeblink,
+                settings.ref_eyeblink,
                 ref_eyeblink_frame_dir,
-                self.settings.preprocess,
+                settings.preprocess,
                 source_image_flag=False
             )
         else:
             ref_eyeblink_coeff_path = None
 
-        if self.settings.ref_pose is not None:
-            if self.settings.ref_pose == self.settings.ref_eyeblink:
+        if settings.ref_pose is not None:
+            if settings.ref_pose == settings.ref_eyeblink:
                 ref_pose_coeff_path = ref_eyeblink_coeff_path
             else:
-                ref_pose_videoname = os.path.splitext(os.path.split(self.settings.ref_pose)[-1])[0]
+                ref_pose_videoname = os.path.splitext(os.path.split(settings.ref_pose)[-1])[0]
                 ref_pose_frame_dir = os.path.join(save_dir, ref_pose_videoname)
                 os.makedirs(ref_pose_frame_dir, exist_ok=True)
                 print('3DMM Extraction for the reference video providing pose')
                 ref_pose_coeff_path, _, _ = self.preprocess_model.generate(
-                    self.settings.ref_pose,
+                    settings.ref_pose,
                     ref_pose_frame_dir,
-                    self.settings.preprocess,
+                    settings.preprocess,
                     source_image_flag=False
                 )
         else:
@@ -101,21 +112,21 @@ class SadTalkerGenerator:
         # audio2ceoff
         batch = get_data(
             first_coeff_path, wav_path,
-            self.settings.device,
+            settings.device,
             ref_eyeblink_coeff_path,
-            still=self.settings.still
+            still=settings.still
         )
         coeff_path = self.audio_to_coeff.generate(
             batch, save_dir,
-            self.settings.pose_style,
+            settings.pose_style,
             ref_pose_coeff_path
         )
 
         # 3dface render
-        if self.settings.face3dvis:
+        if settings.face3dvis:
             from src.face3d.visualize import gen_composed_video
             gen_composed_video(
-                self.settings, self.settings.device,
+                settings, settings.device,
                 first_coeff_path, coeff_path, wav_path,
                 os.path.join(save_dir, '3dface.mp4')
             )
@@ -123,20 +134,20 @@ class SadTalkerGenerator:
         # coeff2video
         data = get_facerender_data(
             coeff_path, crop_pic_path, first_coeff_path, wav_path,
-            self.settings.batch_size, self.settings.input_yaw,
-            self.settings.input_pitch, self.settings.input_roll,
-            expression_scale=self.settings.expression_scale,
-            still_mode=self.settings.still,
-            preprocess=self.settings.preprocess,
-            size=self.settings.size
+            settings.batch_size, settings.input_yaw,
+            settings.input_pitch, settings.input_roll,
+            expression_scale=settings.expression_scale,
+            still_mode=settings.still,
+            preprocess=settings.preprocess,
+            size=settings.size
         )
 
         result = self.animate_from_coeff.generate(
             data, save_dir, pic, crop_info,
-            enhancer=self.settings.enhancer,
-            background_enhancer=self.settings.background_enhancer,
-            preprocess=self.settings.preprocess,
-            img_size=self.settings.size
+            enhancer=settings.enhancer,
+            background_enhancer=settings.background_enhancer,
+            preprocess=settings.preprocess,
+            img_size=settings.size
         )
 
         out_file = f"results/{strftime('%Y_%m_%d_%H.%M.%S')}" + '.mp4'
