@@ -1,7 +1,8 @@
 import React from 'react';
 import {PictureOutlined, PlusOutlined} from '@ant-design/icons';
-import {Image, Upload, message} from 'antd';
+import {Image, Upload, message, Collapse, Button, Select} from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
+// import genImgOptions from "../genImgOptions.ts";
 
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
@@ -22,8 +23,9 @@ const UploadImage: React.FC<{
   fileList: UploadFile[];
   onChange: UploadProps['onChange'];
   onPreview: UploadProps['onPreview'];
+  generateImage: () => void;
   selectedImage: File | null;
-}> = ({ fileList, onChange, onPreview, selectedImage }) => {
+}> = ({ fileList, onChange, onPreview, generateImage, selectedImage }) => {
 
 
   const uploadButton = (
@@ -35,18 +37,46 @@ const UploadImage: React.FC<{
 
   return (
       <div>
-          <Upload
-              action="http://localhost:8000/video/upload"
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={onPreview}
-              onChange={onChange}
-              beforeUpload={beforeUpload}
-          >
-              {fileList.length >= 8 ? null : uploadButton}
-          </Upload>
+          <Collapse
+              defaultActiveKey={['1']}
+              size="small"
+              items={[{
+                  key: '1', label: 'Выбрать изображение',
+                  children:
+                      <Upload
+                          action="http://localhost:8000/video/upload"
+                          listType="picture-card"
+                          fileList={fileList}
+                          onPreview={onPreview}
+                          onChange={onChange}
+                          beforeUpload={beforeUpload}
+                      >
+                          {fileList.length >= 8 ? null : uploadButton}
+                      </Upload>
+              }]} />
+          <Collapse
+              size="small"
+              items={[{
+                  key: '1', label: 'Сгенерировать изображение',
+                  children:
+                      <div className="flex flex-col items-center my-4">
+                          {/*<Select*/}
+                          {/*    mode="multiple"*/}
+                          {/*    style={{ width: '100%' }}*/}
+                          {/*    placeholder="Описание аватара"*/}
+                          {/*    onChange={onGenImgChange}*/}
+                          {/*    options={genImgOptions}*/}
+                          {/*/>*/}
+                          <Button
+                              type="primary"
+                              onClick={generateImage}
+                          >
+                              Сгенерировать
+                          </Button>
+                      </div>
+              }]}/>
           <div className="flex flex-col items-center mt-4">
-              <h3 className="text-blue-950 text-xl mb-2">Выбранное изображение:</h3>
+              <h3 className="text-blue-950 text-xl mb-2">Изображение:</h3>
               {selectedImage ? (
                   <Image
                       src={URL.createObjectURL(selectedImage)}

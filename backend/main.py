@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from video.router import router as video_router
+from avatar.router import router as avatar_router
 # from speech.router import router as speech_router
 
 torch.set_num_threads(4)  # safe optimal value, i.e. 2 CPU cores
@@ -13,6 +14,7 @@ app = FastAPI(
 )
 
 app.include_router(video_router)
+app.include_router(avatar_router)
 # app.include_router(speech_router)
 
 app.add_middleware(
