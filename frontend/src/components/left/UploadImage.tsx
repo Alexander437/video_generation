@@ -1,8 +1,6 @@
-import React from 'react';
 import {PictureOutlined, PlusOutlined} from '@ant-design/icons';
-import {Image, Upload, message, Collapse, Button, Select} from 'antd';
+import {Image, Upload, message, Collapse, Button} from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
-// import genImgOptions from "../genImgOptions.ts";
 
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
@@ -19,14 +17,14 @@ const beforeUpload = (file: FileType) => {
   return isJpgOrPng && isLt2M;
 };
 
-const UploadImage: React.FC<{
-  fileList: UploadFile[];
-  onChange: UploadProps['onChange'];
-  onPreview: UploadProps['onPreview'];
-  generateImage: () => void;
-  selectedImage: File | null;
-}> = ({ fileList, onChange, onPreview, generateImage, selectedImage }) => {
 
+function UploadImage (props: {
+    fileList: UploadFile[],
+    onChange: UploadProps['onChange'],
+    onPreview: UploadProps['onPreview'],
+    generateImage: any,
+    selectedImage: File | null,
+}) {
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
@@ -46,12 +44,12 @@ const UploadImage: React.FC<{
                       <Upload
                           action="http://localhost:8000/video/upload"
                           listType="picture-card"
-                          fileList={fileList}
-                          onPreview={onPreview}
-                          onChange={onChange}
+                          fileList={props.fileList}
+                          onPreview={props.onPreview}
+                          onChange={props.onChange}
                           beforeUpload={beforeUpload}
                       >
-                          {fileList.length >= 8 ? null : uploadButton}
+                          {props.fileList.length >= 8 ? null : uploadButton}
                       </Upload>
               }]} />
           <Collapse
@@ -69,7 +67,7 @@ const UploadImage: React.FC<{
                           {/*/>*/}
                           <Button
                               type="primary"
-                              onClick={generateImage}
+                              onClick={props.generateImage}
                           >
                               Сгенерировать
                           </Button>
@@ -77,9 +75,9 @@ const UploadImage: React.FC<{
               }]}/>
           <div className="flex flex-col items-center mt-4">
               <h3 className="text-blue-950 text-xl mb-2">Изображение:</h3>
-              {selectedImage ? (
+              {props.selectedImage ? (
                   <Image
-                      src={URL.createObjectURL(selectedImage)}
+                      src={URL.createObjectURL(props.selectedImage)}
                       className="max-h-1/5"
                       style={{maxHeight: '20vh'}}
                   />
@@ -91,6 +89,6 @@ const UploadImage: React.FC<{
           </div>
       </div>
   );
-};
+}
 
 export default UploadImage;

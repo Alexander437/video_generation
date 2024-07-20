@@ -117,8 +117,13 @@
 ### 4. Install
 
 ```bash
-sudo apt-get install -y python3-dev libasound2-dev build-essential ffmpeg
+sudo apt-get install -y python3-dev libasound2-dev build-essential ffmpeg curl
 pip install -r backend/requirements.txt
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+source ~/.bashrc
+nvm install --lts
+nvm alias default 20.15.1
 ```
 
 Скопировать папки с весами [weights и gfpgan](https://drive.google.com/drive/folders/1eibEb8W2Lhdh1WFNVJj3SGH06we5pHzv?usp=drive_link) и поместить их в папку `backend`
